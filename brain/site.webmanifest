@@ -1,0 +1,13 @@
+{
+  "name": "Brain",
+  "short_name": "Brain",
+  "description": "Your phone, minus the brainrot.",
+  "start_url": "./",
+  "display": "browser",
+  "background_color": "#f8d7e8",
+  "theme_color": "#e08bb6",
+  "icons": [
+    {"src": "assets/favicon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "assets/favicon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}

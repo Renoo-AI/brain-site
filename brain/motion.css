@@ -1,0 +1,64 @@
+/* A short, airy gust carries the page between languages. */
+.language-wind { position: fixed; inset: 0; z-index: 100; pointer-events: none; overflow: hidden; visibility: hidden; contain: strict; }
+.language-wind.is-blowing { visibility: visible; }
+.language-wind i { position: absolute; inset-inline-start: -30%; width: 38%; height: 50px; border-top: 2px solid #fff7dfb3; border-radius: 50%; opacity: 0; filter: drop-shadow(0 1px 3px #ffffff50); }
+.language-wind i:nth-child(1) { top: 15%; width: 50%; }
+.language-wind i:nth-child(2) { top: 32%; height: 80px; animation-delay: .05s; }
+.language-wind i:nth-child(3) { top: 49%; width: 65%; animation-delay: .1s; }
+.language-wind i:nth-child(4) { top: 65%; height: 75px; animation-delay: .025s; }
+.language-wind i:nth-child(5) { top: 81%; width: 50%; animation-delay: .09s; }
+.language-wind i:nth-child(6) { top: 23%; width: 23%; animation-delay: .17s; }
+.language-wind.is-blowing i { animation-name: wind-ribbon; animation-duration: .7s; animation-timing-function: cubic-bezier(.15, .5, .35, 1); animation-fill-mode: both; }
+.language-wind b { position: absolute; left: -10%; top: 35%; width: 13px; height: 7px; border-radius: 90% 0 90% 0; background: #e7edc5; opacity: 0; }
+.language-wind b:nth-of-type(2) { top: 68%; width: 9px; background: #fff3d3; animation-delay: .1s; }
+.language-wind b:nth-of-type(3) { top: 20%; width: 11px; animation-delay: .16s; }
+.language-wind.is-blowing b { animation-name: wind-leaf; animation-duration: .7s; animation-fill-mode: both; animation-timing-function: ease-out; }
+::view-transition-old(root) { animation: language-away .3s ease-in both; }
+::view-transition-new(root) { animation: language-arrive .5s cubic-bezier(.2, .65, .25, 1) both; }
+::view-transition-group(root) { animation-duration: .55s; }
+@keyframes language-away { to { opacity: 0; transform: translateX(-22px); filter: blur(5px); } }
+@keyframes language-arrive { from { opacity: 0; transform: translateX(25px); filter: blur(5px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes wind-ribbon { 0% { opacity: 0; translate: 0 15px; } 20% { opacity: .8; } 75% { opacity: .6; } 100% { opacity: 0; translate: 380% -30px; } }
+@keyframes wind-leaf { 0% { opacity: 0; transform: translate(0, 0) rotate(-20deg); } 20% { opacity: .8; } 100% { opacity: 0; transform: translate(115vw, -55px) rotate(260deg); } }
+@supports not (view-transition-name: root) { .language-changing main { animation: fallback-breeze .68s ease both; } }
+@keyframes fallback-breeze { 0%, 100% { opacity: 1; filter: none; } 35% { opacity: .45; filter: blur(3px); } 65% { opacity: .85; filter: blur(1px); } }
+
+/* FAQ panels open and close with their contents, without jumping the page. */
+.faq-list .faq-answer { display: flow-root; }
+.faq-list .faq-answer > p { font-size: 14px; line-height: 1.7; padding: 0 28px 24px 25px; color: #52637a; margin: 0; }
+.faq-list details { transition: box-shadow .25s, background .25s; }
+.faq-list details:hover { box-shadow: inset 1px 3px 3px #fff9, 0 4px 0 #cfc8b5, 0 13px 18px -10px #5b7d8f40; }
+.faq-list summary::after { content: '+' !important; transition: transform .3s cubic-bezier(.2, .8, .2, 1), color .3s; transform-origin: center; }
+.faq-list details[open] summary::after { transform: rotate(45deg); color: #d6558c; }
+.faq-list summary:focus-visible { outline: 3px solid #d6558c; outline-offset: -5px; border-radius: 24px; }
+
+/* Tactile buttons compress on press */
+.clay-button, .language-switch, .nav-toggle, .text-link { transition: transform .2s cubic-bezier(.2, .8, .2, 1), filter .2s, opacity .2s; }
+.clay-button:hover { transform: translateY(-3px) rotate(-.7deg); filter: drop-shadow(0 10px 7px #25517c28); }
+.clay-button:active { transform: translateY(3px) scale(.97); filter: drop-shadow(0 2px 2px #25517c22); }
+.text-link:hover { transform: translateY(-1px); }
+.platform-surface:active { transform: translateY(2px) scale(.98); }
+
+/* The parrot wakes only while its island is near the viewport. */
+.parrot-guide { position: absolute; z-index: 3; inset-inline-end: 8px; top: 3px; width: 116px; aspect-ratio: 320 / 300; opacity: 0; transform: translateY(40px) rotate(9deg); transition: opacity .6s, transform .9s cubic-bezier(.15, .8, .25, 1); pointer-events: none; }
+.parrot-awake .parrot-guide { opacity: 1; transform: none; }
+.parrot-flight { width: 100%; height: 100%; filter: drop-shadow(0 10px 4px #476d4620); animation: parrot-bob 5.5s ease-in-out infinite; animation-play-state: paused; }
+.parrot-sprite { width: 100%; height: 100%; background: url('assets/parrot-flight-3.png') 0 0/300% 100% no-repeat; animation: parrot-flap .66s steps(1, end) infinite; animation-play-state: paused; }
+.parrot-awake .parrot-flight, .parrot-awake .parrot-sprite { animation-play-state: running; }
+.parrot-spark { position: absolute; color: #fff0b5; font-size: 20px; text-shadow: 0 2px 0 #a6a56370; animation: spark-drift 3s ease-in-out infinite; animation-play-state: paused; }
+.parrot-awake .parrot-spark { animation-play-state: running; }
+.spark-one { inset-inline-end: 0; top: 14px; }
+.spark-two { inset-inline-start: 5px; bottom: 13px; font-size: 15px; animation-delay: -1.5s; }
+@keyframes parrot-flap { 0%, 100% { background-position: 0 0; } 33.333% { background-position: 50% 0; } 66.666% { background-position: 100% 0; } }
+@keyframes parrot-bob { 0%, 100% { transform: translate(0, 0) rotate(-4deg); } 25% { transform: translate(calc(var(--parrot-direction, -1) * 40px), -32px) rotate(3deg); } 50% { transform: translate(calc(var(--parrot-direction, -1) * 100px), -60px) rotate(-4deg); } 75% { transform: translate(calc(var(--parrot-direction, -1) * 62px), -20px) rotate(4deg); } }
+@keyframes spark-drift { 0%, 100% { opacity: .25; transform: translateY(0) scale(.8); } 50% { opacity: 1; transform: translateY(-7px) scale(1); } }
+@media (max-width: 700px) { .parrot-guide { width: 100px; top: -8px; inset-inline-end: 1px; } }
+@media (max-width: 480px) { .faq-list .faq-answer > p { font-size: 13px; padding: 0 21px 21px 20px; } .parrot-guide { width: 94px; top: -7px; } }
+@media (prefers-reduced-motion: reduce) {
+  .language-wind { display: none !important; }
+  ::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(root) { animation: none !important; }
+  .parrot-guide { opacity: 1; transform: none; transition: none; }
+  .parrot-flight, .parrot-sprite, .parrot-spark { animation: none !important; }
+  .clay-button:hover, .clay-button:active { transform: none; }
+}
+[dir=rtl] .parrot-guide { --parrot-direction: 1; }

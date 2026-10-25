@@ -1,0 +1,36 @@
+/* Arabic styling: real, accessible Arabic typography & RTL flow. */
+.language-switch { border: 1px solid #193b6130; background: #fff5e3d9; color: var(--ink); padding: 5px 13px; border-radius: 20px; font: 600 13px/1.6 'Noto Sans Arabic', sans-serif; margin-top: -5px; }
+.top-nav nav { align-items: center; flex-wrap: wrap; }
+html[dir=rtl] { --display: 'Baloo Bhaijaan 2', 'Noto Sans Arabic', sans-serif; --body: 'Noto Sans Arabic', sans-serif; }
+[dir=rtl] h2, [dir=rtl] h3, [dir=rtl] .sign-link { letter-spacing: 0; line-height: 1.35; }
+[dir=rtl] .intro-line { line-height: 1.7; }
+[dir=rtl] .intro-brain { display: none; }
+[dir=rtl] .intro-scene h1 img { transform: translateY(clamp(-90px, -5vw, -40px)); }
+[dir=rtl] .intro-line, [dir=rtl] .intro-actions, [dir=rtl] .intro-platforms { transform: translateY(-20px); }
+[dir=rtl] .top-nav { right: auto; left: 36px; }
+[dir=rtl] .join-heading, [dir=rtl] .faq-intro h2 { text-align: start; }
+[dir=rtl] .story-copy p { line-height: 1.95; }
+[dir=rtl] .faq-list summary { padding: 23px 25px 23px 50px; }
+[dir=rtl] .faq-list summary::after { right: auto; left: 23px; }
+[dir=rtl] .phone-time { direction: ltr; }
+[dir=rtl] .phone-caption { font-size: 12px; line-height: 1.5; }
+[dir=rtl] .handle { direction: ltr; }
+[dir=rtl] .sign-link { font-size: clamp(15px, 1.8vw, 27px); }
+@media (max-width: 700px) {
+  .top-nav nav { gap: 15px; }
+  [dir=rtl] .faq-intro { padding: 0 0 0 140px; }
+  [dir=rtl] .faq-intro > img { right: auto; left: 0; }
+  [dir=rtl] .sign-link { font-size: 17px; }
+}
+@media (max-width: 480px) {
+  .top-nav { left: 18px; right: 18px; }
+  .top-nav nav { justify-content: center; gap: 15px; }
+  [dir=rtl] .top-nav { left: 18px; right: 18px; }
+  [dir=rtl] .faq-intro { padding: 0 0 0 115px; }
+  [dir=rtl] .join-heading { text-align: center; }
+  [dir=rtl] .sign-link { font-size: 14px; }
+  [dir=rtl] .clay-button { font-size: 18px; }
+  [dir=rtl] .join-card-title { font-size: 30px; }
+}
+[dir=rtl] .outro { direction: ltr; }
+[dir=rtl] .sign-link, [dir=rtl] .copyright { direction: rtl; }
