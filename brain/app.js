@@ -1,7 +1,3 @@
-/* Connect a Supabase project URL and PUBLIC anon key to accept real signups.
-   Never put a service-role key in browser code. */
-const CONFIG = { supabaseUrl: '', supabaseKey: '' };
-
 (() => {
   'use strict';
   const $ = selector => document.querySelector(selector);
@@ -20,8 +16,6 @@ const CONFIG = { supabaseUrl: '', supabaseKey: '' };
 
   const form = $('#wl'), input = $('#ig'), hint = $('#hint'), submit = $('#go');
   const defaultHint = 'No email needed. Just one launch DM.';
-  const live = Boolean(CONFIG.supabaseUrl && CONFIG.supabaseKey);
-  $('#preview-notice').hidden = live;
   function say(message, error = false) {
     hint.textContent = message;
     hint.classList.toggle('err', error);
@@ -35,30 +29,17 @@ const CONFIG = { supabaseUrl: '', supabaseKey: '' };
     if (hint.classList.contains('err')) say(defaultHint);
   }));
   async function save(handle, platform) {
-    if (!live) {
-      const key = 'brain-waitlist-preview';
-      const records = JSON.parse(localStorage.getItem(key) || '[]');
-      const already = records.some(record => record.handle === handle);
-      if (!already) {
-        records.push({ handle, platform, createdAt: new Date().toISOString() });
-        localStorage.setItem(key, JSON.stringify(records));
-      }
-      return { already, local: true };
-    }
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const response = await fetch(`${CONFIG.supabaseUrl.replace(/\/$/, '')}/rest/v1/waitlist`, {
+      const response = await fetch('/api/waitlist', {
         method: 'POST', signal: controller.signal,
-        headers: { apikey: CONFIG.supabaseKey, Authorization: `Bearer ${CONFIG.supabaseKey}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-        body: JSON.stringify({ instagram: handle, platform, app: 'brain' })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ handle, platform, website: $('#website').value })
       });
-      if (response.ok) return { already: false, local: false };
-      if (response.status === 409) {
-        const error = await response.json().catch(() => ({}));
-        if (error.code === '23505') return { already: true, local: false };
-      }
-      throw new Error('Save failed');
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || 'Save failed');
+      return { already: Boolean(result.already), local: false };
     } finally { clearTimeout(timeout); }
   }
   form.addEventListener('submit', async event => {
@@ -81,16 +62,14 @@ const CONFIG = { supabaseUrl: '', supabaseKey: '' };
     form.setAttribute('aria-busy', 'true');
     try {
       const result = await save(handle, platform);
-      $('#done-title').textContent = result.local ? 'Saved on this device.' : result.already ? 'You’re already on the list!' : 'You’re on the list!';
-      $('#done-description').textContent = result.local
-        ? `@${handle}, this is a website preview. Your preference is saved in this browser only. Follow @brainandpip for launch updates.`
-        : `We’ll DM @${handle} on Instagram when Brain is ready for ${platform === 'ios' ? 'iPhone' : 'Android'}.`;
+      $('#done-title').textContent = result.already ? 'You’re already on the list!' : 'You’re on the list!';
+      $('#done-description').textContent = `We’ll DM @${handle} on Instagram when Brain is ready for ${platform === 'ios' ? 'iPhone' : 'Android'}.`;
       form.hidden = true;
       $('.join-bell').hidden = true;
       $('#done').hidden = false;
       $('#done').focus({ preventScroll: true });
     } catch {
-      say(live ? 'Couldn’t save your spot. Please try again.' : 'Browser storage is unavailable. Follow @brainandpip for launch updates.', true);
+      say('Couldn’t save your spot. Please try again.', true);
     } finally {
       submit.disabled = false;
       submit.textContent = 'Save my spot';
